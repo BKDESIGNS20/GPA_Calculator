@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universityof Malakand GPA/CGPA Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .container {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        input, select {
+            padding: 6px;
+            margin: 2px;
+            width: 90%;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .results {
+            background-color: #e8f4fc;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .semester-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+        .gpa-scale {
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>University GPA/CGPA Calculator</h1>
+        <p>Developed By Hazrat Bilal</p>
+        <div class="gpa-scale">
+            <h3>GPA Scale (University of Malakand)</h3>
+            <p>85+ = 4.0 | 80-84 = 3.9 | 75-79 = 3.6 | 70-74 = 3.3 | 65-69 = 3.0 | 60-64 = 2.7 | 55-59 = 2.3 | 50-54 = 2.0 | Below 50 = Fail</p>
+        </div>
+
+        <div id="semesters-container">
+            <!-- Semesters will be added here dynamically -->
+        </div>
+
+        <button id="add-semester">Add New Semester</button>
+
+        <div class="results">
+            <h2>Overall Results</h2>
+            <p>Total Completed Credit Hours: <span id="total-credits">0</span></p>
+            <p>Current CGPA: <span id="cgpa">0.00</span></p>
+        </div>
+    </div>
+
+    <script>
+        // GPA calculation function based on marks
+        function calculateGPA(marks) {
+            marks = parseFloat(marks);
+            if (marks >= 85) return 4.0;
+            if (marks >= 80) return 3.9;
+            if (marks >= 75) return 3.6;
+            if (marks >= 70) return 3.3;
+            if (marks >= 65) return 3.0;
+            if (marks >= 60) return 2.7;
+            if (marks >= 55) return 2.3;
+            if (marks >= 50) return 2.0;
+            return 0.0; // Fail
+        }
+
+        // Add a new semester
+        function addSemester(semesterNumber = null) {
+            const semestersContainer = document.getElementById('semesters-container');
+            const semesterCount = document.querySelectorAll('.semester').length;
+            const newSemesterNumber = semesterNumber || semesterCount + 1;
+
+            const semesterDiv = document.createElement('div');
+            semesterDiv.className = 'semester';
+            semesterDiv.dataset.semesterNumber = newSemesterNumber;
+
+            semesterDiv.innerHTML = `
+                <div class="semester-controls">
+                    <h2>Semester ${newSemesterNumber}</h2>
+                    <div>
+                        <button class="add-course">Add Course</button>
+                        <button class="remove-semester">Remove Semester</button>
+                    </div>
+                </div>
+                <table class="courses-table">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Cr. Hrs.</th>
+                            <th>Marks</th>
+                            <th>GPA Value</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Courses will be added here -->
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2">Semester GPA:</td>
+                            <td id="semester-gpa-${newSemesterNumber}" colspan="3">0.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            `;
+
+            semestersContainer.appendChild(semesterDiv);
+
+            // Add initial course
+            addCourseToSemester(newSemesterNumber);
+        }
+
+        // Add a new course to a semester
+        function addCourseToSemester(semesterNumber) {
+            const semesterDiv = document.querySelector(`.semester[data-semester-number="${semesterNumber}"]`);
+            const tbody = semesterDiv.querySelector('tbody');
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="text" class="subject" placeholder="Subject name"></td>
+                <td><input type="number" class="credit-hours" min="1" max="10" value="3"></td>
+                <td><input type="number" class="marks" min="0" max="100" placeholder="Marks"></td>
+                <td class="gpa-value">0.0</td>
+                <td class="status">-</td>
+                <td><button class="remove-course">Remove</button></td>
+            `;
+
+            tbody.appendChild(row);
+
+            // Add event listeners for the new inputs
+            const marksInput = row.querySelector('.marks');
+            const creditHoursInput = row.querySelector('.credit-hours');
+
+            marksInput.addEventListener('input', updateCalculations);
+            creditHoursInput.addEventListener('input', updateCalculations);
+        }
+
+        // Update all calculations
+        function updateCalculations() {
+            // Update all course GPAs and statuses
+            document.querySelectorAll('.semester').forEach(semesterDiv => {
+                const semesterNumber = semesterDiv.dataset.semesterNumber;
+                const rows = semesterDiv.querySelectorAll('tbody tr');
+                
+                let totalWeightedGPA = 0;
+                let totalCreditHours = 0;
+
+                rows.forEach(row => {
+                    const marksInput = row.querySelector('.marks');
+                    const creditHoursInput = row.querySelector('.credit-hours');
+                    const gpaCell = row.querySelector('.gpa-value');
+                    const statusCell = row.querySelector('.status');
+
+                    const marks = parseFloat(marksInput.value) || 0;
+                    const creditHours = parseFloat(creditHoursInput.value) || 0;
+                    const gpa = calculateGPA(marks);
+                    
+                    gpaCell.textContent = gpa.toFixed(1);
+                    statusCell.textContent = marks >= 50 ? 'PASSED' : 'FAILED';
+
+                    if (marks >= 50) {
+                        totalWeightedGPA += gpa * creditHours;
+                        totalCreditHours += creditHours;
+                    }
+                });
+
+                // Update semester GPA
+                const semesterGPA = totalCreditHours > 0 ? (totalWeightedGPA / totalCreditHours) : 0;
+                semesterDiv.querySelector(`#semester-gpa-${semesterNumber}`).textContent = semesterGPA.toFixed(2);
+            });
+
+            // Update CGPA
+            updateCGPA();
+        }
+
+        // Calculate overall CGPA
+        function updateCGPA() {
+            let totalWeightedGPA = 0;
+            let totalCreditHours = 0;
+
+            document.querySelectorAll('.semester').forEach(semesterDiv => {
+                const rows = semesterDiv.querySelectorAll('tbody tr');
+                
+                rows.forEach(row => {
+                    const marksInput = row.querySelector('.marks');
+                    const creditHoursInput = row.querySelector('.credit-hours');
+                    
+                    const marks = parseFloat(marksInput.value) || 0;
+                    const creditHours = parseFloat(creditHoursInput.value) || 0;
+                    const gpa = calculateGPA(marks);
+
+                    if (marks >= 50) {
+                        totalWeightedGPA += gpa * creditHours;
+                        totalCreditHours += creditHours;
+                    }
+                });
+            });
+
+            const cgpa = totalCreditHours > 0 ? (totalWeightedGPA / totalCreditHours) : 0;
+            document.getElementById('cgpa').textContent = cgpa.toFixed(2);
+            document.getElementById('total-credits').textContent = totalCreditHours;
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add first semester by default
+            addSemester(1);
+
+            // Add semester button
+            document.getElementById('add-semester').addEventListener('click', () => {
+                addSemester();
+            });
+
+            // Delegated event listeners for dynamic elements
+            document.getElementById('semesters-container').addEventListener('click', (e) => {
+                // Add course button
+                if (e.target.classList.contains('add-course')) {
+                    const semesterNumber = e.target.closest('.semester').dataset.semesterNumber;
+                    addCourseToSemester(semesterNumber);
+                }
+                
+                // Remove course button
+                if (e.target.classList.contains('remove-course')) {
+                    const row = e.target.closest('tr');
+                    row.remove();
+                    updateCalculations();
+                }
+                
+                // Remove semester button
+                if (e.target.classList.contains('remove-semester')) {
+                    const semesterDiv = e.target.closest('.semester');
+                    if (document.querySelectorAll('.semester').length > 1) {
+                        semesterDiv.remove();
+                        
+                        // Renumber remaining semesters
+                        document.querySelectorAll('.semester').forEach((div, index) => {
+                            const semesterNumber = index + 1;
+                            div.dataset.semesterNumber = semesterNumber;
+                            div.querySelector('h2').textContent = `Semester ${semesterNumber}`;
+                            div.querySelector(`#semester-gpa-${div.dataset.semesterNumber}`).id = `semester-gpa-${semesterNumber}`;
+                        });
+                        
+                        updateCalculations();
+                    } else {
+                        alert("You need at least one semester.");
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
