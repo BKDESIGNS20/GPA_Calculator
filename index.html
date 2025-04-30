@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universityof Malakand GPA/CGPA Calculator</title>
+    <title>University of Malakand GPA/CGPA Calculator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,107 +12,206 @@
             margin: 0 auto;
             padding: 20px;
             color: #333;
+            background-color: #f5f5f5;
         }
         h1, h2 {
             color: #2c3e50;
+            text-align: center;
         }
         .container {
-            background-color: #f9f9f9;
+            background-color: white;
             border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 25px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 15px 0;
+            font-size: 14px;
         }
         th, td {
             border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
+            padding: 10px;
+            text-align: center;
         }
         th {
             background-color: #3498db;
             color: white;
+            font-weight: bold;
         }
         tr:nth-child(even) {
-            background-color: #f2f2f2;
+            background-color: #f9f9f9;
         }
         input, select {
-            padding: 6px;
-            margin: 2px;
-            width: 90%;
+            padding: 8px;
+            width: 95%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
         button {
             background-color: #3498db;
             color: white;
             border: none;
-            padding: 8px 16px;
+            padding: 10px 18px;
             margin: 5px;
             border-radius: 4px;
             cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
         }
         button:hover {
             background-color: #2980b9;
         }
         .results {
             background-color: #e8f4fc;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+            text-align: center;
         }
         .semester-controls {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-        }
-        .hidden {
-            display: none;
+            margin-bottom: 15px;
+            background-color: #f0f7fc;
+            padding: 10px;
+            border-radius: 6px;
         }
         .gpa-scale {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             font-size: 0.9em;
+            background-color: #e8f4fc;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .scale-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .scale-box {
+            width: 48%;
+            margin-bottom: 10px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8em;
+            color: #666;
+        }
+        .error {
+            border-color: #e74c3c !important;
+        }
+        @media (max-width: 768px) {
+            .scale-container {
+                flex-direction: column;
+            }
+            .scale-box {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>University GPA/CGPA Calculator</h1>
-        <p>Developed By Hazrat Bilal</p>
-        <p>Dept. Of CS Govt. Degree College Thana</p>
+        <h1>University of Malakand GPA/CGPA Calculator</h1>
+        <h2>Developed By Hazrat Bilal</h2>
+        <h2>Govt. Degree College Thana</h2>
+        
         <div class="gpa-scale">
-            <h3>GPA Scale (University of Malakand)</h3>
-            <p>85+ = 4.0 | 80-84 = 3.9 | 75-79 = 3.6 | 70-74 = 3.3 | 65-69 = 3.0 | 60-64 = 2.7 | 55-59 = 2.3 | 50-54 = 2.0 | Below 50 = Fail</p>
+            <h3>Official GPA Scale</h3>
+            <div class="scale-container">
+                <div class="scale-box">
+                    <h4>100-Mark Courses:</h4>
+                    <table>
+                        <tr><th>Marks</th><th>GPA</th></tr>
+                        <tr><td>85-100</td><td>4.0</td></tr>
+                        <tr><td>80-84</td><td>3.9</td></tr>
+                        <tr><td>75-79</td><td>3.6</td></tr>
+                        <tr><td>70-74</td><td>3.3</td></tr>
+                        <tr><td>66-69</td><td>3.1</td></tr>
+                        <tr><td>65</td><td>3.0</td></tr>
+                        <tr><td>60-64</td><td>2.7</td></tr>
+                        <tr><td>55-59</td><td>2.3</td></tr>
+                        <tr><td>50-54</td><td>2.0</td></tr>
+                        <tr><td>&lt;50</td><td>0.0</td></tr>
+                    </table>
+                </div>
+                <div class="scale-box">
+                    <h4>50-Mark Courses:</h4>
+                    <table>
+                        <tr><th>Marks</th><th>GPA</th></tr>
+                        <tr><td>50</td><td>4.0</td></tr>
+                        <tr><td>45-49</td><td>3.6</td></tr>
+                        <tr><td>40-44</td><td>3.0</td></tr>
+                        <tr><td>35-39</td><td>2.0</td></tr>
+                        <tr><td>&lt;35</td><td>0.0</td></tr>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <div id="semesters-container">
             <!-- Semesters will be added here dynamically -->
         </div>
 
-        <button id="add-semester">Add New Semester</button>
+        <div style="text-align: center; margin: 20px 0;">
+            <button id="add-semester">+ Add New Semester</button>
+        </div>
 
         <div class="results">
-            <h2>Overall Results</h2>
-            <p>Total Completed Credit Hours: <span id="total-credits">0</span></p>
-            <p>Current CGPA: <span id="cgpa">0.00</span></p>
+            <h2>Academic Summary</h2>
+            <div style="display: flex; justify-content: center; gap: 30px; margin-top: 15px;">
+                <div>
+                    <h3>Total Credit Hours</h3>
+                    <p style="font-size: 24px; font-weight: bold;" id="total-credits">0</p>
+                </div>
+                <div>
+                    <h3>Current CGPA</h3>
+                    <p style="font-size: 24px; font-weight: bold;" id="cgpa">0.00</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // GPA calculation function based on marks
-        function calculateGPA(marks) {
+        // GPA calculation function with precise rounding
+        function calculateGPA(marks, maxMarks) {
             marks = parseFloat(marks);
-            if (marks >= 85) return 4.0;
-            if (marks >= 80) return 3.9;
-            if (marks >= 75) return 3.6;
-            if (marks >= 70) return 3.3;
-            if (marks >= 65) return 3.0;
-            if (marks >= 60) return 2.7;
-            if (marks >= 55) return 2.3;
-            if (marks >= 50) return 2.0;
-            return 0.0; // Fail
+            maxMarks = parseFloat(maxMarks);
+            
+            // Convert to percentage if not already
+            const percentage = (marks / maxMarks) * 100;
+            
+            // For 100-mark courses
+            if (maxMarks === 100) {
+                if (percentage >= 85) return 4.0;
+                if (percentage >= 80) return 3.9;
+                if (percentage >= 75) return 3.6;
+                if (percentage >= 70) return 3.3;
+                if (percentage >= 66) return 3.1;
+                if (percentage >= 65) return 3.0;
+                if (percentage >= 60) return 2.7;
+                if (percentage >= 55) return 2.3;
+                if (percentage >= 50) return 2.0;
+                return 0.0;
+            }
+            // For 50-mark courses
+            else if (maxMarks === 50) {
+                if (percentage >= 90) return 4.0;    // 45/50 = 90%
+                if (percentage >= 80) return 3.6;    // 40/50 = 80%
+                if (percentage >= 70) return 3.0;    // 35/50 = 70%
+                if (percentage >= 60) return 2.0;    // 30/50 = 60%
+                return 0.0;
+            }
+            return 0.0;
+        }
+
+        // Round to 2 decimal places (banker's rounding)
+        function preciseRound(num) {
+            return Math.round((num + Number.EPSILON) * 100) / 100;
         }
 
         // Add a new semester
@@ -127,21 +226,23 @@
 
             semesterDiv.innerHTML = `
                 <div class="semester-controls">
-                    <h2>Semester ${newSemesterNumber}</h2>
+                    <h2 style="margin: 0;">Semester ${newSemesterNumber}</h2>
                     <div>
-                        <button class="add-course">Add Course</button>
-                        <button class="remove-semester">Remove Semester</button>
+                        <button class="add-course">+ Add Course</button>
+                        <button class="remove-semester" style="background-color: #e74c3c;">− Remove Semester</button>
                     </div>
                 </div>
                 <table class="courses-table">
                     <thead>
                         <tr>
-                            <th>Subject</th>
-                            <th>Cr. Hrs.</th>
-                            <th>Marks</th>
-                            <th>GPA Value</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th width="25%">Subject Name</th>
+                            <th width="10%">Cr. Hrs.</th>
+                            <th width="15%">Max Marks</th>
+                            <th width="10%">Obt. Marks</th>
+                            <th width="10%">GPA</th>
+                            <th width="10%">Status</th>
+                            <th width="10%">Points</th>
+                            <th width="10%">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -149,16 +250,14 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="2">Semester GPA:</td>
-                            <td id="semester-gpa-${newSemesterNumber}" colspan="3">0.00</td>
+                            <td colspan="3"><strong>Semester GPA:</strong></td>
+                            <td id="semester-gpa-${newSemesterNumber}" colspan="5">0.00</td>
                         </tr>
                     </tfoot>
                 </table>
             `;
 
             semestersContainer.appendChild(semesterDiv);
-
-            // Add initial course
             addCourseToSemester(newSemesterNumber);
         }
 
@@ -169,87 +268,137 @@
 
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><input type="text" class="subject" placeholder="Subject name"></td>
-                <td><input type="number" class="credit-hours" min="1" max="10" value="3"></td>
-                <td><input type="number" class="marks" min="0" max="100" placeholder="Marks"></td>
+                <td><input type="text" class="subject" placeholder="Subject name" required></td>
+                <td><input type="number" class="credit-hours" min="2" max="4" value="3" step="1"></td>
+                <td>
+                    <select class="max-marks">
+                        <option value="100">100</option>
+                        <option value="50">50</option>
+                    </select>
+                </td>
+                <td><input type="number" class="obtained-marks" min="0" placeholder="Marks" required></td>
                 <td class="gpa-value">0.0</td>
                 <td class="status">-</td>
-                <td><button class="remove-course">Remove</button></td>
+                <td class="points">0.0</td>
+                <td><button class="remove-course" style="background-color: #e74c3c; padding: 6px 10px;">×</button></td>
             `;
 
             tbody.appendChild(row);
 
-            // Add event listeners for the new inputs
-            const marksInput = row.querySelector('.marks');
+            // Add event listeners
+            const marksInput = row.querySelector('.obtained-marks');
             const creditHoursInput = row.querySelector('.credit-hours');
+            const maxMarksSelect = row.querySelector('.max-marks');
 
             marksInput.addEventListener('input', updateCalculations);
             creditHoursInput.addEventListener('input', updateCalculations);
+            maxMarksSelect.addEventListener('change', updateCalculations);
         }
 
-        // Update all calculations
+        // Update all calculations with precise rounding
         function updateCalculations() {
-            // Update all course GPAs and statuses
+            let allSemestersValid = true;
+            
             document.querySelectorAll('.semester').forEach(semesterDiv => {
                 const semesterNumber = semesterDiv.dataset.semesterNumber;
                 const rows = semesterDiv.querySelectorAll('tbody tr');
                 
-                let totalWeightedGPA = 0;
+                let totalWeightedPoints = 0;
                 let totalCreditHours = 0;
+                let semesterValid = true;
 
                 rows.forEach(row => {
-                    const marksInput = row.querySelector('.marks');
+                    const marksInput = row.querySelector('.obtained-marks');
                     const creditHoursInput = row.querySelector('.credit-hours');
+                    const maxMarksSelect = row.querySelector('.max-marks');
                     const gpaCell = row.querySelector('.gpa-value');
                     const statusCell = row.querySelector('.status');
+                    const pointsCell = row.querySelector('.points');
 
                     const marks = parseFloat(marksInput.value) || 0;
                     const creditHours = parseFloat(creditHoursInput.value) || 0;
-                    const gpa = calculateGPA(marks);
+                    const maxMarks = parseFloat(maxMarksSelect.value) || 100;
+                    const gpa = calculateGPA(marks, maxMarks);
                     
                     gpaCell.textContent = gpa.toFixed(1);
-                    statusCell.textContent = marks >= 50 ? 'PASSED' : 'FAILED';
+                    
+                    // Determine passing marks (50% for 100-mark, 60% for 50-mark courses)
+                    const passingPercentage = maxMarks === 100 ? 50 : 60;
+                    const passingMarks = (passingPercentage / 100) * maxMarks;
+                    const passed = marks >= passingMarks;
+                    statusCell.textContent = passed ? 'PASSED' : 'FAILED';
+                    statusCell.style.color = passed ? 'green' : 'red';
 
-                    if (marks >= 50) {
-                        totalWeightedGPA += gpa * creditHours;
+                    // Calculate points
+                    const points = passed ? preciseRound(gpa * creditHours) : 0;
+                    pointsCell.textContent = points.toFixed(1);
+
+                    if (passed) {
+                        totalWeightedPoints += points;
                         totalCreditHours += creditHours;
+                    }
+
+                    // Validate credit hours (2-4)
+                    if (creditHours < 2 || creditHours > 4 || !Number.isInteger(creditHours)) {
+                        creditHoursInput.classList.add('error');
+                        semesterValid = false;
+                    } else {
+                        creditHoursInput.classList.remove('error');
+                    }
+
+                    // Validate marks (0 to maxMarks)
+                    if (marks < 0 || marks > maxMarks) {
+                        marksInput.classList.add('error');
+                        semesterValid = false;
+                    } else {
+                        marksInput.classList.remove('error');
                     }
                 });
 
-                // Update semester GPA
-                const semesterGPA = totalCreditHours > 0 ? (totalWeightedGPA / totalCreditHours) : 0;
-                semesterDiv.querySelector(`#semester-gpa-${semesterNumber}`).textContent = semesterGPA.toFixed(2);
+                // Update semester GPA with precise rounding
+                const semesterGPA = totalCreditHours > 0 ? preciseRound(totalWeightedPoints / totalCreditHours) : 0;
+                const gpaCell = semesterDiv.querySelector(`#semester-gpa-${semesterNumber}`);
+                gpaCell.textContent = semesterGPA.toFixed(2);
+                gpaCell.style.fontWeight = "bold";
+                gpaCell.style.color = semesterValid ? "green" : "red";
+
+                if (!semesterValid) allSemestersValid = false;
             });
 
-            // Update CGPA
-            updateCGPA();
+            // Update CGPA with precise rounding
+            updateCGPA(allSemestersValid);
         }
 
-        // Calculate overall CGPA
-        function updateCGPA() {
-            let totalWeightedGPA = 0;
+        // Calculate overall CGPA with precise rounding
+        function updateCGPA(allValid = true) {
+            let totalWeightedPoints = 0;
             let totalCreditHours = 0;
 
             document.querySelectorAll('.semester').forEach(semesterDiv => {
                 const rows = semesterDiv.querySelectorAll('tbody tr');
                 
                 rows.forEach(row => {
-                    const marksInput = row.querySelector('.marks');
-                    const creditHoursInput = row.querySelector('.credit-hours');
+                    const marks = parseFloat(row.querySelector('.obtained-marks').value) || 0;
+                    const creditHours = parseFloat(row.querySelector('.credit-hours').value) || 0;
+                    const maxMarks = parseFloat(row.querySelector('.max-marks').value) || 100;
+                    const gpa = calculateGPA(marks, maxMarks);
                     
-                    const marks = parseFloat(marksInput.value) || 0;
-                    const creditHours = parseFloat(creditHoursInput.value) || 0;
-                    const gpa = calculateGPA(marks);
+                    // Determine passing marks
+                    const passingPercentage = maxMarks === 100 ? 50 : 60;
+                    const passingMarks = (passingPercentage / 100) * maxMarks;
 
-                    if (marks >= 50) {
-                        totalWeightedGPA += gpa * creditHours;
+                    if (marks >= passingMarks) {
+                        totalWeightedPoints += preciseRound(gpa * creditHours);
                         totalCreditHours += creditHours;
                     }
                 });
             });
 
-            const cgpa = totalCreditHours > 0 ? (totalWeightedGPA / totalCreditHours) : 0;
-            document.getElementById('cgpa').textContent = cgpa.toFixed(2);
+            const cgpa = totalCreditHours > 0 ? preciseRound(totalWeightedPoints / totalCreditHours) : 0;
+            const cgpaElement = document.getElementById('cgpa');
+            cgpaElement.textContent = cgpa.toFixed(2);
+            cgpaElement.style.color = allValid ? "green" : "red";
+            
             document.getElementById('total-credits').textContent = totalCreditHours;
         }
 
@@ -274,25 +423,31 @@
                 // Remove course button
                 if (e.target.classList.contains('remove-course')) {
                     const row = e.target.closest('tr');
-                    row.remove();
-                    updateCalculations();
+                    if (row.closest('tbody').querySelectorAll('tr').length > 1) {
+                        row.remove();
+                        updateCalculations();
+                    } else {
+                        alert("Each semester must have at least one course.");
+                    }
                 }
                 
                 // Remove semester button
                 if (e.target.classList.contains('remove-semester')) {
                     const semesterDiv = e.target.closest('.semester');
                     if (document.querySelectorAll('.semester').length > 1) {
-                        semesterDiv.remove();
-                        
-                        // Renumber remaining semesters
-                        document.querySelectorAll('.semester').forEach((div, index) => {
-                            const semesterNumber = index + 1;
-                            div.dataset.semesterNumber = semesterNumber;
-                            div.querySelector('h2').textContent = `Semester ${semesterNumber}`;
-                            div.querySelector(`#semester-gpa-${div.dataset.semesterNumber}`).id = `semester-gpa-${semesterNumber}`;
-                        });
-                        
-                        updateCalculations();
+                        if (confirm("Are you sure you want to remove this semester and all its courses?")) {
+                            semesterDiv.remove();
+                            
+                            // Renumber remaining semesters
+                            document.querySelectorAll('.semester').forEach((div, index) => {
+                                const semesterNumber = index + 1;
+                                div.dataset.semesterNumber = semesterNumber;
+                                div.querySelector('h2').textContent = `Semester ${semesterNumber}`;
+                                div.querySelector(`#semester-gpa-${div.dataset.semesterNumber}`).id = `semester-gpa-${semesterNumber}`;
+                            });
+                            
+                            updateCalculations();
+                        }
                     } else {
                         alert("You need at least one semester.");
                     }
