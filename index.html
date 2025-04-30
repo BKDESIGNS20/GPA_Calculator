@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>University of Malakand GPA/CGPA Calculator</title>
+    <title>University of Malakand CGPA Calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -104,6 +106,12 @@
         .error {
             border-color: #e74c3c !important;
         }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
         @media (max-width: 768px) {
             .scale-container {
                 flex-direction: column;
@@ -115,50 +123,18 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>University of Malakand GPA/CGPA Calculator</h1>
-        <h2>Developed By Hazrat Bilal</h2>
+    <div class="container" id="calculator-content">
+        <h1>UNIVERSITY OF MALAKAND</h1>
         <h2>Govt. Degree College Thana</h2>
-        
-        <div class="gpa-scale">
-            <h3>Official GPA Scale</h3>
-            <div class="scale-container">
-                <div class="scale-box">
-                    <h4>100-Mark Courses:</h4>
-                    <table>
-                        <tr><th>Marks</th><th>GPA</th></tr>
-                        <tr><td>85-100</td><td>4.0</td></tr>
-                        <tr><td>80-84</td><td>3.9</td></tr>
-                        <tr><td>75-79</td><td>3.6</td></tr>
-                        <tr><td>70-74</td><td>3.3</td></tr>
-                        <tr><td>66-69</td><td>3.1</td></tr>
-                        <tr><td>65</td><td>3.0</td></tr>
-                        <tr><td>60-64</td><td>2.7</td></tr>
-                        <tr><td>55-59</td><td>2.3</td></tr>
-                        <tr><td>50-54</td><td>2.0</td></tr>
-                        <tr><td>&lt;50</td><td>0.0</td></tr>
-                    </table>
-                </div>
-                <div class="scale-box">
-                    <h4>50-Mark Courses:</h4>
-                    <table>
-                        <tr><th>Marks</th><th>GPA</th></tr>
-                        <tr><td>50</td><td>4.0</td></tr>
-                        <tr><td>45-49</td><td>3.6</td></tr>
-                        <tr><td>40-44</td><td>3.0</td></tr>
-                        <tr><td>35-39</td><td>2.0</td></tr>
-                        <tr><td>&lt;35</td><td>0.0</td></tr>
-                    </table>
-                </div>
-            </div>
-        </div>
+        <h2>GPA and CGPA Calculator</h2>
 
         <div id="semesters-container">
             <!-- Semesters will be added here dynamically -->
         </div>
 
-        <div style="text-align: center; margin: 20px 0;">
+        <div class="action-buttons">
             <button id="add-semester">+ Add New Semester</button>
+            <button id="download-pdf" style="background-color: #27ae60;">↓ Download Transcript</button>
         </div>
 
         <div class="results">
@@ -175,35 +151,67 @@
             </div>
         </div>
     </div>
+    <div class="gpa-scale">
+        <h3>Official GPA Scale</h3>
+        <div class="scale-container">
+            <div class="scale-box">
+                <h4>100-Mark Courses:</h4>
+                <table>
+                    <tr><th>Marks</th><th>GPA</th></tr>
+                    <tr><td>85-100</td><td>4.0</td></tr>
+                    <tr><td>80-84</td><td>3.9</td></tr>
+                    <tr><td>75-79</td><td>3.6</td></tr>
+                    <tr><td>70-74</td><td>3.3</td></tr>
+                    <tr><td>66-69</td><td>3.1</td></tr>
+                    <tr><td>65</td><td>3.0</td></tr>
+                    <tr><td>60-64</td><td>2.7</td></tr>
+                    <tr><td>55-59</td><td>2.3</td></tr>
+                    <tr><td>50-54</td><td>2.0</td></tr>
+                    <tr><td>&lt;50</td><td>0.0</td></tr>
+                </table>
+            </div>
+            <div class="scale-box">
+                <h4>50-Mark Courses:</h4>
+                <table>
+                    <tr><th>Marks</th><th>GPA</th></tr>
+                    <tr><td>45-50</td><td>4.0</td></tr>
+                    <tr><td>40-44</td><td>3.6</td></tr>
+                    <tr><td>35-39</td><td>3.2</td></tr>
+                    <tr><td>30-34</td><td>2.0</td></tr>
+                    <tr><td>&lt;30</td><td>0.0</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <script>
+        // Initialize jsPDF
+        const { jsPDF } = window.jspdf;
+
         // GPA calculation function with precise rounding
         function calculateGPA(marks, maxMarks) {
             marks = parseFloat(marks);
             maxMarks = parseFloat(maxMarks);
             
-            // Convert to percentage if not already
-            const percentage = (marks / maxMarks) * 100;
-            
             // For 100-mark courses
             if (maxMarks === 100) {
-                if (percentage >= 85) return 4.0;
-                if (percentage >= 80) return 3.9;
-                if (percentage >= 75) return 3.6;
-                if (percentage >= 70) return 3.3;
-                if (percentage >= 66) return 3.1;
-                if (percentage >= 65) return 3.0;
-                if (percentage >= 60) return 2.7;
-                if (percentage >= 55) return 2.3;
-                if (percentage >= 50) return 2.0;
+                if (marks >= 85) return 4.0;
+                if (marks >= 80) return 3.9;
+                if (marks >= 75) return 3.6;
+                if (marks >= 70) return 3.3;
+                if (marks >= 66) return 3.1;
+                if (marks >= 65) return 3.0;
+                if (marks >= 60) return 2.7;
+                if (marks >= 55) return 2.3;
+                if (marks >= 50) return 2.0;
                 return 0.0;
             }
-            // For 50-mark courses
+            // For 50-mark courses (adjusted scale)
             else if (maxMarks === 50) {
-                if (percentage >= 90) return 4.0;    // 45/50 = 90%
-                if (percentage >= 80) return 3.6;    // 40/50 = 80%
-                if (percentage >= 70) return 3.0;    // 35/50 = 70%
-                if (percentage >= 60) return 2.0;    // 30/50 = 60%
+                if (marks >= 45) return 4.0;
+                if (marks >= 40) return 3.6;
+                if (marks >= 35) return 3.2;
+                if (marks >= 30) return 2.0;
                 return 0.0;
             }
             return 0.0;
@@ -322,9 +330,8 @@
                     
                     gpaCell.textContent = gpa.toFixed(1);
                     
-                    // Determine passing marks (50% for 100-mark, 60% for 50-mark courses)
-                    const passingPercentage = maxMarks === 100 ? 50 : 60;
-                    const passingMarks = (passingPercentage / 100) * maxMarks;
+                    // Determine passing marks (50 for 100-mark, 30 for 50-mark courses)
+                    const passingMarks = maxMarks === 100 ? 50 : 30;
                     const passed = marks >= passingMarks;
                     statusCell.textContent = passed ? 'PASSED' : 'FAILED';
                     statusCell.style.color = passed ? 'green' : 'red';
@@ -384,8 +391,7 @@
                     const gpa = calculateGPA(marks, maxMarks);
                     
                     // Determine passing marks
-                    const passingPercentage = maxMarks === 100 ? 50 : 60;
-                    const passingMarks = (passingPercentage / 100) * maxMarks;
+                    const passingMarks = maxMarks === 100 ? 50 : 30;
 
                     if (marks >= passingMarks) {
                         totalWeightedPoints += preciseRound(gpa * creditHours);
@@ -402,6 +408,45 @@
             document.getElementById('total-credits').textContent = totalCreditHours;
         }
 
+        // Generate PDF transcript
+        function generatePDF() {
+            const element = document.getElementById('calculator-content');
+            const opt = {
+                margin: 10,
+                filename: 'University_Transcript.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Create a temporary clone to modify for PDF
+            const clone = element.cloneNode(true);
+            clone.style.width = '210mm';
+            clone.style.padding = '20mm';
+            document.body.appendChild(clone);
+            
+            // Hide buttons in PDF
+            clone.querySelectorAll('button').forEach(btn => btn.style.display = 'none');
+            
+            // Add "Generated on" date
+            const date = new Date();
+            const dateString = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            const dateElement = document.createElement('div');
+            dateElement.style.textAlign = 'center';
+            dateElement.style.marginTop = '20px';
+            dateElement.style.fontSize = '12px';
+            dateElement.textContent = `Generated on: ${dateString}`;
+            clone.appendChild(dateElement);
+
+            html2canvas(clone, opt.html2canvas).then(canvas => {
+                const imgData = canvas.toDataURL('image/jpeg');
+                const pdf = new jsPDF(opt.jsPDF);
+                pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+                pdf.save(opt.filename);
+                document.body.removeChild(clone);
+            });
+        }
+
         // Event listeners
         document.addEventListener('DOMContentLoaded', () => {
             // Add first semester by default
@@ -411,6 +456,9 @@
             document.getElementById('add-semester').addEventListener('click', () => {
                 addSemester();
             });
+
+            // Download PDF button
+            document.getElementById('download-pdf').addEventListener('click', generatePDF);
 
             // Delegated event listeners for dynamic elements
             document.getElementById('semesters-container').addEventListener('click', (e) => {
